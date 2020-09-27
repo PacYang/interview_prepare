@@ -1,29 +1,22 @@
-# 给定一个数组和一个数，都是整数型的，使之满足list[i]+list[j]+...+list[k] = M,求出所有的组合
-total = []
-allSet = []
-from copy import deepcopy
-def getAll(array,notInIndex, M, nowList):
-	# print(nowList)
-	global total
-	for i in range(len(array)):
-		notInIndexx = deepcopy(notInIndex)
-		nowListt = deepcopy(nowList)
-		if i in notInIndexx:
-			continue
-		if array[i] == M:
-			notInIndexx.append(i)
-			nowListt.append(array[i])
-			notInIndexx.sort()
-			if notInIndexx not in allSet:
-				total.append(nowListt)
-				allSet.append(notInIndexx)
+# 给定一个数组和一个数，都是整数型的，使之满足list[i]+list[j]+...+list[k] = M,求出所有的组合\
+
+def getAll(nums, M):
+	total = []
+	nums.sort()
+	def dfs(tmp,begin,left_num):
+		if left_num == 0:
+			total.append(tmp[:])
 		else:
-			notInIndexx.append(i)
-			nowListt.append(array[i])
-			getAll(array, notInIndexx, M-array[i], nowListt)
-      
+			for i in range(begin, len(nums)):
+				if nums[i] > left_num:
+					return
+				tmp.append(nums[i])
+				dfs(tmp, i+1, left_num-nums[i])
+				tmp.pop()
+	dfs([], 0, M)
+	return total
+	
 if __name__ == '__main__':
 	a = [1,2,3,3,2,1,5]
 	M = 6
-	getAll(a, [], M, [])
-	print(total)
+	print(getAll(a, M))
